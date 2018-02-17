@@ -1,11 +1,10 @@
 package info.jsjackson.services;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.Before;
@@ -34,7 +33,29 @@ public class RecipeServiceImplTest {
 	}
 
 	@Test
-	public void testGetRecipes() {
+	public void getRecipeByItTest() throws Exception {
+		//Given
+		Recipe recipe = new Recipe();
+		recipe.setId(1L);
+		Optional<Recipe> recipeOptional = Optional.of(recipe);
+		
+		when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+		
+		//When
+		Recipe recipeReturned = recipeService.getById(1L);
+		
+		//Then
+		assertNotNull("Null Recipe Returned", recipeReturned);
+		
+		//verify interactions
+		verify(recipeRepository, times(1)).findById(anyLong());
+		verify(recipeRepository, never()).findAll();
+		
+		
+	}
+	
+	@Test
+	public void testGetRecipes() throws Exception {
 		
 		//Given
 		Recipe recipe = new Recipe();
@@ -55,7 +76,7 @@ public class RecipeServiceImplTest {
 		
 		//When
 		Set<Recipe> recipes = recipeService.getRecipes();
-		System.out.println("Recipes: " + recipes);
+		//System.out.println("Recipes: " + recipes);
 		
 		//Then
 		assertEquals(1, recipes.size());
