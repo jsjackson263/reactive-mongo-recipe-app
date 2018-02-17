@@ -43,32 +43,12 @@
                     <td th:text="${recipe.id}">789</td>
                     <td th:text="${recipe.description}">Tasty Goodness 3</td>
                   </tr>
-
-
                 </table>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-    <h1>My Recipes</h1>
-    <table>
-      <tr>
-        <th>Id</th>
-        <th>Description</th>
-      </tr>
-      <tr th:each="recipe : ${recipes}">
-        <td th:text="${recipe.id}">123</td>
-        <td th:text="${recipe.description}">Tasty Goodnaess</td>
-      </tr>
-    </table>
-
   </body>
 </html>
