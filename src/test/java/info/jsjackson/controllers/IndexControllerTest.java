@@ -57,7 +57,7 @@ public class IndexControllerTest {
 
 	
 	@Test
-	public void testIndexController() {
+	public void testGetIndexPage() {
 		//Given
 		Set<Recipe> recipes = new HashSet<Recipe>();
 		recipes.add(new Recipe());
@@ -85,9 +85,5 @@ public class IndexControllerTest {
 		
 	}
 
-	/*@Test
-	public void testGetIndexPage() {
-		fail("Not yet implemented"); // TODO
-	}*/
 
 }
