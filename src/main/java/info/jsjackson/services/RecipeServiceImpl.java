@@ -6,6 +6,7 @@ package info.jsjackson.services;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -39,26 +40,23 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 	
 
-	/* (non-Javadoc)
-	 * @see info.jsjackson.services.CRUDService#getById(java.lang.Long)
-	 */
 	@Override
 	public Recipe getById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+		if (!recipeOptional.isPresent()) {
+			throw new RuntimeException("Recipe Not Found");
+		}
+		
+		return recipeOptional.get();
+		
 	}
 
-	/* (non-Javadoc)
-	 * @see info.jsjackson.services.CRUDService#saveOrUpdate(java.lang.Object)
-	 */
 	@Override
 	public Recipe saveOrUpdate(Recipe domainObject) {
 		return recipeRepository.save(domainObject);
 	}
 
-	/* (non-Javadoc)
-	 * @see info.jsjackson.services.CRUDService#delete(java.lang.Long)
-	 */
 	@Override
 	public void delete(Long id) {
 		// TODO Auto-generated method stub
