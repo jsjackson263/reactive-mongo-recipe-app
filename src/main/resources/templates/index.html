@@ -50,7 +50,7 @@
                     <td><a href="#">View</a></td>
                   </tr>
                   <tr th:each="recipe: ${recipes}">
-                    <!-- to find out - does this work for IntelliJ only? what about Eclipse? -->
+                    <!-- intellisense - to find out - does this work for IntelliJ only? what about Eclipse? -->
                      <!--/*@thymesVar id="recipe" type="info.jsjackson.domain.Recipe"*/-->
                     <td th:text="${recipe.id}">789</td>
                     <td th:text="${recipe.description}">Tasty Goodness 3</td>
