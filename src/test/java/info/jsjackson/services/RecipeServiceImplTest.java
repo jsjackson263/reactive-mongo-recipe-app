@@ -33,7 +33,7 @@ public class RecipeServiceImplTest {
 	}
 
 	@Test
-	public void getRecipeByItTest() throws Exception {
+	public void getRecipeByIdTest() throws Exception {
 		//Given
 		Recipe recipe = new Recipe();
 		recipe.setId(1L);
