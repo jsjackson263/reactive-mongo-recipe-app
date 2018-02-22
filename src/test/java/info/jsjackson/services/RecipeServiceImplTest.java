@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import info.jsjackson.converters.RecipeCommandToRecipe;
+import info.jsjackson.converters.RecipeToRecipeCommand;
 import info.jsjackson.domain.Difficulty;
 import info.jsjackson.domain.Notes;
 import info.jsjackson.domain.Recipe;
@@ -26,10 +28,16 @@ public class RecipeServiceImplTest {
 	@Mock
 	RecipeRepository recipeRepository;
 	
+	@Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
+
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+    
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		recipeService = new RecipeServiceImpl(recipeRepository);
+		recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
 	}
 
 	@Test
@@ -42,7 +50,7 @@ public class RecipeServiceImplTest {
 		when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
 		
 		//When
-		Recipe recipeReturned = recipeService.getById(1L);
+		Recipe recipeReturned = recipeService.findById(1L);
 		
 		//Then
 		assertNotNull("Null Recipe Returned", recipeReturned);
