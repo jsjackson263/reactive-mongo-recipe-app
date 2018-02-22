@@ -28,7 +28,7 @@ public class RecipeController {
 	@RequestMapping("/recipe/show/{id}")
 	public String showById(@PathVariable String id, Model model) {
 		
-		Recipe recipe = recipeService.getById(new Long(id));
+		Recipe recipe = recipeService.findById(new Long(id));
 		model.addAttribute("recipe", recipe);
 		
 		//return view name
