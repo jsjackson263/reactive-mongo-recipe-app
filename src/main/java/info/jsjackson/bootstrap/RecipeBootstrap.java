@@ -23,9 +23,7 @@ import info.jsjackson.domain.UnitOfMeasure;
 import info.jsjackson.repositories.CategoryRepository;
 import info.jsjackson.repositories.RecipeRepository;
 import info.jsjackson.repositories.UnitOfMeasureRepository;
-import info.jsjackson.services.CategoryService;
 import info.jsjackson.services.RecipeService;
-import info.jsjackson.services.UnitOfMeasureService;
 
 /**
  * @author josan
