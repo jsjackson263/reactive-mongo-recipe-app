@@ -45,7 +45,7 @@ public class RecipeControllerTest {
 
 		//use a Mock ServletContext
 		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		when(recipeService.getById(anyLong())).thenReturn(recipe);
+		when(recipeService.findById(anyLong())).thenReturn(recipe);
 		
 		//When, Then ?
 		mockMvc.perform(get("/recipe/show/2"))
