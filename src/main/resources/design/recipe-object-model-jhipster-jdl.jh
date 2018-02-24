@@ -10,15 +10,14 @@ entity Recipe {
     difficulty Difficulty,
     notes Notes
 }
-entity Category {
-	description String,
-}
 
 entity Ingredient {
 	description String
     amount BigDecimal
 }
-
+entity Category {
+	description String,
+}
 entity UnitOfMeasure {
 	description String,
 }
