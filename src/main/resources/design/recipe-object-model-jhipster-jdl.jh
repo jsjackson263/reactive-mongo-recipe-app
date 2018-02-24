@@ -45,7 +45,7 @@ relationship OneToOne {
 	Ingredient{unitOfMeasure} to UnitOfMeasure
 }
 relationship ManyToMany {
-	Recipe{unitOfMeasure} to Category
+	Recipe{category} to Category
 }
 
 
