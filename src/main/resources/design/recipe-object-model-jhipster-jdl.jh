@@ -38,6 +38,9 @@ relationship OneToOne {
 relationship OneToMany {
 	Recipe{recipe} to Ingredient
 }
+relationship OneToMany {
+	Ingredient{recipe} to Recipe
+}
 relationship OneToOne {
 	Ingredient{unitOfMeasure} to UnitOfMeasure
 }
