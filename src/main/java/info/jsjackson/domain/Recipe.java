@@ -52,6 +52,7 @@ public class Recipe {
 	private Set<Category> categories = new HashSet<>();
 	
 	
+	//XXX:Document some of these setters (see pro-tips: - using setters for JPA bidirectional relationships)
 	public void setNotes(Notes notes) {
 		if (notes != null) {
 			this.notes = notes;
