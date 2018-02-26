@@ -60,7 +60,7 @@ public class RecipeController {
 		RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
 
 		//tell SpringMVC to redirect to a specific url
-		return "redirect:/recipe/show/" + savedCommand.getId(); 
+		return "redirect:/recipe/" + savedCommand.getId() + "/show"; 
 		
 	}
 }
