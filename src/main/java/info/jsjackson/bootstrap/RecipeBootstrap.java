@@ -38,8 +38,6 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 	private CategoryRepository categoryRepository;
 	private UnitOfMeasureRepository unitOfMeasureRepository;
 
-	Logger logger = Logger.getLogger(RecipeBootstrap.class);
-
 	public RecipeBootstrap(RecipeRepository recipeRepository, CategoryRepository categoryRepository,
 			UnitOfMeasureRepository unitOfMeasureRepository) {
 		this.recipeRepository = recipeRepository;
@@ -52,7 +50,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 	@Transactional  
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent paramE) {
-		logger.info("Event Source: " + paramE.getSource().toString());
+		log.debug("Event Source: " + paramE.getSource().toString());
 		List<Recipe> recipes = getRecipes();
 		recipeRepository.saveAll(recipes);
 	}
