@@ -61,9 +61,20 @@ public class RecipeServiceImpl implements RecipeService {
 		return recipeOptional.get();
 		
 	}
-
+	
 	@Override
 	@Transactional
+	public RecipeCommand findCommandById(long l) {
+		return recipeToRecipeCommand.convert(findById(l));
+	}
+
+
+	/*
+	 * because we're doing conversion outside the scope - any lazily loaded properties might 
+	 * create problems, so expand transactional scope to this method
+	 */
+	@Override
+	@Transactional 
 	public RecipeCommand saveRecipeCommand(RecipeCommand command) {
 
 		//detached from the hibernate context
@@ -74,6 +85,7 @@ public class RecipeServiceImpl implements RecipeService {
 		return recipeToRecipeCommand.convert(savedRecipe);
 	}
 
+	
 	
 
 }
