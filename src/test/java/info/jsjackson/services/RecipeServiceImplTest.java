@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import info.jsjackson.commands.RecipeCommand;
 import info.jsjackson.converters.RecipeCommandToRecipe;
 import info.jsjackson.converters.RecipeToRecipeCommand;
 import info.jsjackson.domain.Difficulty;
@@ -92,7 +93,31 @@ public class RecipeServiceImplTest {
 		//verify that the repository is called once
 		verify(recipeRepository, times(1)).findAll();
 	}
+	
+	@Test
+	public void testSaveARecipeCommand() throws Exception {
+		
+		//Given
+		Recipe savedRecipe = new Recipe();
+		savedRecipe.setId(2L);
+		when(recipeRepository.save(any())).thenReturn(savedRecipe);
+		
+		RecipeCommand recipeCommand = new RecipeCommand();
+		recipeCommand.setId(2L);
+		when(recipeToRecipeCommand.convert(savedRecipe)).thenReturn(recipeCommand);
+		
+		//When
+		RecipeCommand returnedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand);
+		
+		//Then
+		assertNotNull("saved recipe not null", returnedRecipeCommand);
+		assertEquals(Long.valueOf(2L), returnedRecipeCommand.getId());
+		
+		
+		//Testing updateService will be the same as this test
+	}
 
+	
 	
 	
 }
