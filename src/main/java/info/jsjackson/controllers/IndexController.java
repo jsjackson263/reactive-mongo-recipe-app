@@ -16,11 +16,13 @@ import info.jsjackson.domain.UnitOfMeasure;
 import info.jsjackson.repositories.CategoryRepository;
 import info.jsjackson.repositories.UnitOfMeasureRepository;
 import info.jsjackson.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author josan
  *
  */
+@Slf4j
 @Controller
 public class IndexController {
 
@@ -34,6 +36,8 @@ public class IndexController {
 	@RequestMapping({"/", "", "/index"})
 	public String getIndexPage(Model model) {
 
+		log.debug("Getting index page");
+		
 		Set<Recipe> recipes = recipeService.getRecipes();
 		model.addAttribute("recipes", recipes);
 		
