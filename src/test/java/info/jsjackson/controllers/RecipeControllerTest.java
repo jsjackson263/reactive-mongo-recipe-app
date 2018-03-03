@@ -2,6 +2,7 @@ package info.jsjackson.controllers;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -119,10 +120,23 @@ public class RecipeControllerTest {
 		 verify(recipeService, times(1)).findCommandById(anyLong());
 		 verifyNoMoreInteractions(recipeService);
 	
+	}
+	
+	@Test
+	public void testDeleteRecipeAction() throws Exception {
 		
+		//no when, since method doesn't return anything - just verify the it's been invoked
 		
+		//we're using "get" here because we cannot do a delete method within http unless we're using JavaScript.
+		//for a Restful interface we'd be doing the delete http method - here' we're limited to HTML
+		mockMvc.perform(get("/recipe/1/delete"))
+		.andExpect(status().is5xxServerError())
+		.andExpect(view().name("redirect:/"))
+		.andReturn();
+		
+		verify(recipeService, times(1)).deleteById(anyLong());
 		
 	}
-
+	
 }
 
