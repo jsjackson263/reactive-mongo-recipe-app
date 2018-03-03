@@ -24,11 +24,13 @@ import info.jsjackson.repositories.CategoryRepository;
 import info.jsjackson.repositories.RecipeRepository;
 import info.jsjackson.repositories.UnitOfMeasureRepository;
 import info.jsjackson.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author josan
  *
  */
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
