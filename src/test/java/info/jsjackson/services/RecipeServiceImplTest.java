@@ -89,6 +89,22 @@ public class RecipeServiceImplTest {
 		verify(recipeRepository, never()).save(any());
 	}
 	
+	@Test 
+	public void deleteRecipeById() throws Exception {
+		
+		//Given
+		Long idToDelete = Long.valueOf(1L);
+		
+		//no when, since method doesn't return anything - just verify the it's been invoked
+		
+		//When
+		recipeService.deleteById(idToDelete);
+		
+		//Then
+		verify(recipeRepository, times(1)).deleteById(idToDelete);
+		
+	}
+	
 	@Test
 	public void getRecipesTest() throws Exception {
 		
