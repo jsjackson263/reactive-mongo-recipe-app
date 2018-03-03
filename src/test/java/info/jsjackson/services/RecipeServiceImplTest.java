@@ -64,7 +64,33 @@ public class RecipeServiceImplTest {
 	}
 	
 	@Test
-	public void testGetRecipes() throws Exception {
+	public void getRecipeCommandByIdTest() throws Exception {
+		
+		//Given
+		Recipe recipe = new Recipe();
+		recipe.setId(2L);
+		Optional<Recipe> recipeOptional = Optional.of(recipe);
+		when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+		
+		RecipeCommand recipeCommand = new RecipeCommand();
+		recipeCommand.setId(2L);
+		when(recipeToRecipeCommand.convert(recipe)).thenReturn(recipeCommand);
+		
+		//When
+		RecipeCommand returnedRecipeCommand = recipeService.findCommandById(2L);
+		
+		//Then
+		assertNotNull("null RecipeCommand Returned", returnedRecipeCommand);
+		assertEquals(Long.valueOf(2L), returnedRecipeCommand.getId());
+		
+		verify(recipeRepository, times(1)).findById(anyLong());
+		verify(recipeRepository, never()).findAll();
+		verify(recipeRepository, never()).deleteById(anyLong());
+		verify(recipeRepository, never()).save(any());
+	}
+	
+	@Test
+	public void getRecipesTest() throws Exception {
 		
 		//Given
 		Recipe recipe = new Recipe();
