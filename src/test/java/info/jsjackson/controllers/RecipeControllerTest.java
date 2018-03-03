@@ -130,7 +130,7 @@ public class RecipeControllerTest {
 		//we're using "get" here because we cannot do a delete method within http unless we're using JavaScript.
 		//for a Restful interface we'd be doing the delete http method - here' we're limited to HTML
 		mockMvc.perform(get("/recipe/1/delete"))
-		.andExpect(status().is5xxServerError())
+		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/"))
 		.andReturn();
 		
