@@ -31,7 +31,6 @@ public class RecipeController {
 	
 	@RequestMapping("/recipe/{id}/show")
 	public String showById(@PathVariable String id, Model model) {
-		
 		Recipe recipe = recipeService.findById(new Long(id));
 		model.addAttribute("recipe", recipe);
 		
@@ -41,15 +40,15 @@ public class RecipeController {
 	
 	@RequestMapping("recipe/new")
 	public String newRecipe(Model model) {
-		
 		model.addAttribute("recipe", new RecipeCommand());
 		return "recipe/recipeform";
 	}
 
 	@RequestMapping("/recipe/{id}/update")
 	public String updateRecipe(@PathVariable String id, Model model) {
-		
-		return "";
+		//keep the controllers clean - let the service convert the objects
+		model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
+		return "recipe/recipeform";
 	}
 	
 	//@RequestMapping(name = "recipe", method = RequestMethod.POST)  - alternatively

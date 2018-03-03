@@ -100,6 +100,29 @@ public class RecipeControllerTest {
 		.andReturn();
 		
 	}
+	
+	@Test
+	public void testGetUpdateView() throws Exception {
+		
+		RecipeCommand command = new RecipeCommand();
+		command.setId(5L);
+		
+		when(recipeService.findCommandById(anyLong())).thenReturn(command);
+		
+		mockMvc.perform(get("/recipe/1/update"))
+		.andExpect(status().isOk())
+		.andExpect(view().name("recipe/recipeform"))
+		.andExpect(MockMvcResultMatchers.model().attributeExists("recipe"))
+		.andReturn();
+		
+		//verify interactions - additional testing
+		 verify(recipeService, times(1)).findCommandById(anyLong());
+		 verifyNoMoreInteractions(recipeService);
+	
+		
+		
+		
+	}
 
 }
 
