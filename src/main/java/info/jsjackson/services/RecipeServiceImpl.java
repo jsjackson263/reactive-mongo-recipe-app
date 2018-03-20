@@ -3,9 +3,7 @@
  */
 package info.jsjackson.services;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,9 +14,7 @@ import info.jsjackson.commands.RecipeCommand;
 import info.jsjackson.converters.RecipeCommandToRecipe;
 import info.jsjackson.converters.RecipeToRecipeCommand;
 import info.jsjackson.domain.Recipe;
-import info.jsjackson.repositories.CategoryRepository;
 import info.jsjackson.repositories.RecipeRepository;
-import info.jsjackson.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 
 /**
