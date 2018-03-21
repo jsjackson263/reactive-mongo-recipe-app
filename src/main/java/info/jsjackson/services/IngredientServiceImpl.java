@@ -70,13 +70,13 @@ public class IngredientServiceImpl implements IngredientService {
 
 
 	@Override
-	public IngredientCommand saveIngredientCommand(IngredientCommand command) {
+	public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
 
-		Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
+		Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
 		if (!recipeOptional.isPresent()) {
 			//recipe not found in DB
 			//TODO: toss error if not found!
-			log.error("Recipe not found for id: " + command.getRecipeId());
+			log.error("Recipe not found for id: " + ingredientCommand.getRecipeId());
 			return new IngredientCommand();
 		} else {
 			//we found a recipe in DB - get ingredient that matches the id presented
@@ -84,33 +84,49 @@ public class IngredientServiceImpl implements IngredientService {
 			Optional<Ingredient> ingredientOptional = recipe
 	                    .getIngredients()
 	                    .stream()
-	                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
+	                    .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
 	                    .findFirst();
 			
 			if (ingredientOptional.isPresent()) {
 				//we're trying to add an existing ingredient - update it
 				Ingredient ingredientFound = ingredientOptional.get();
-                ingredientFound.setDescription(command.getDescription());
-                ingredientFound.setAmount(command.getAmount());
+                ingredientFound.setDescription(ingredientCommand.getDescription());
+                ingredientFound.setAmount(ingredientCommand.getAmount());
                 ingredientFound.setUom(unitOfMeasureRepository
-                        .findById(command.getUnitOfMeasure().getId())
+                        .findById(ingredientCommand.getUnitOfMeasure().getId())
                         .orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); //TODO: address this
 			} else {
               //no ingredient found in DB - add new Ingredient
-                recipe.addIngredient(ingredientCommandToIngredient.convert(command));
+                //recipe.addIngredient(ingredientCommandToIngredient.convert(command));
+				Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
+				ingredient.setRecipe(recipe);
+				recipe.addIngredient(ingredient);
 			}
 			 
 
 			//save back the recipe (and it's ingredients)
 			Recipe savedRecipe =  recipeRepository.save(recipe);
 			
+			//TODO: REVIEW below !!!!!!!
+			
+			 Optional<Ingredient> savedIngredientOptional = savedRecipe.getIngredients().stream()
+	                    .filter(recipeIngredients -> recipeIngredients.getId().equals(ingredientCommand.getId()))
+	                    .findFirst();
+			 
+			//check by description
+	         if(!savedIngredientOptional.isPresent()){
+	             //not totally safe... But best guess
+	             savedIngredientOptional = savedRecipe.getIngredients().stream()
+	                     .filter(recipeIngredients -> recipeIngredients.getDescription().equals(ingredientCommand.getDescription()))
+	                     .filter(recipeIngredients -> recipeIngredients.getAmount().equals(ingredientCommand.getAmount()))
+	                     .filter(recipeIngredients -> recipeIngredients.getUom().getId().equals(ingredientCommand.getUnitOfMeasure().getId()))
+	                     .findFirst();
+	         }
+	         
 			//return back the saved ingredient command back to the view
 			//TODO: do check for fail
-            return ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
-                    .filter(recipeIngredients -> recipeIngredients.getId().equals(command.getId()))
-                    .findFirst()
-                    .get());
-            
+	         return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
+	         
 		}
 		
 	}
