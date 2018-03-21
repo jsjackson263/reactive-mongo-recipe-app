@@ -3,6 +3,7 @@
  */
 package info.jsjackson.controllers;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import info.jsjackson.commands.IngredientCommand;
+import info.jsjackson.commands.RecipeCommand;
 import info.jsjackson.commands.UnitOfMeasureCommand;
 import info.jsjackson.services.IngredientService;
 import info.jsjackson.services.RecipeService;
@@ -59,6 +61,28 @@ public class IngredientController {
 		
 		return "recipe/ingredient/show";
 
+	}
+	
+	@GetMapping
+	@RequestMapping("/recipe/{recipeId}/ingredient/new")
+	public String newIngredient(@PathVariable String recipeId, Model model) {
+		
+		//make sure we have a good id value
+		RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+		//TODO: raise exception if null
+		
+		//need to turn back parent id for hidden form property
+		IngredientCommand ingredientCommand = new IngredientCommand();
+		ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+		model.addAttribute("ingredient", ingredientCommand);
+		
+		//init UOM
+		ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+		
+		return "recipe/ingredient/ingredientform";
+		
+		
 	}
 	
 	@GetMapping
