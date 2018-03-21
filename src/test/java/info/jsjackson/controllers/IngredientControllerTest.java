@@ -2,6 +2,8 @@ package info.jsjackson.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -86,6 +88,31 @@ public class IngredientControllerTest {
 		.andReturn();
 		
 	}
+	
+	@Test
+	public void testNewIngredientForm() throws Exception {
+		
+		//Given
+		RecipeCommand command = new RecipeCommand();
+		command.setId(1L);
+		
+		//When
+		when(recipeService.findCommandById(anyLong())).thenReturn(command);
+		when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+		
+		//Then
+		mockMvc.perform(post("/recipe/1/ingredient/new"))
+		.andExpect(status().isOk())
+		.andExpect(view().name("recipe/ingredient/ingredientform"))
+		.andExpect(model().attributeExists("ingredient"))
+		.andExpect(model().attributeExists("uomList"))
+		.andReturn();
+				
+		verify(recipeService, times(1)).findCommandById(anyLong());
+		
+		
+	}
+	
 	
 	@Test
 	public void testUpdateIngredientForm() throws Exception {
