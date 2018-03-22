@@ -131,4 +131,37 @@ public class IngredientServiceImpl implements IngredientService {
 		
 	}
 
+
+	@Override
+	public void deleteById(Long recipeId, Long ingredientId) {
+		
+		log.error("In Service - Deleting Ingredient: " + ingredientId + " for recipeId: " + recipeId);
+		
+		Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+		if (recipeOptional.isPresent()) {
+			Recipe recipe = recipeOptional.get();
+			//TODO:the log statement below causes a StackOverflowError when domain objects
+			//are annotated with @Data, instead of @Getter/@Setter. find out why
+			log.debug("Found recipe: " + recipe.toString()); 
+			
+			Optional<Ingredient> ingredientOptional = 
+					recipe
+					.getIngredients()
+					.stream()
+					.filter(ingredient -> ingredient.getId().equals(ingredientId))
+					.findFirst();
+			
+			if (ingredientOptional.isPresent()) {
+				Ingredient ingredient = ingredientOptional.get();
+				log.debug("Found ingredient: " + ingredient.toString());
+				ingredient.setRecipe(null);
+				recipe.getIngredients().remove(recipeOptional.get());
+				recipeRepository.save(recipe);
+			}
+		} else {
+			//recipe not found in DB
+			log.error("Recipe not found for id: " + recipeId);
+		}
+	}
+	
 }
