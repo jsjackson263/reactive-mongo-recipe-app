@@ -30,8 +30,7 @@ public class RecipeController {
 		this.recipeService = recipeService;
 	}
 	
-	@GetMapping
-	@RequestMapping("/recipe/{id}/show")
+	@GetMapping("/recipe/{id}/show")
 	public String showById(@PathVariable String id, Model model) {
 		Recipe recipe = recipeService.findById(new Long(id));
 		model.addAttribute("recipe", recipe);
@@ -40,16 +39,14 @@ public class RecipeController {
 		return "recipe/show";
 	}
 	
-	@GetMapping
-	@RequestMapping("recipe/new")
+	@GetMapping("recipe/new")
 	public String newRecipe(Model model) {
 		model.addAttribute("recipe", new RecipeCommand());
 		return "recipe/recipeform";
 		//TODO: fix input tag for recipeForm
 	}
 
-	@GetMapping
-	@RequestMapping("/recipe/{id}/update")
+	@GetMapping("/recipe/{id}/update")
 	public String updateRecipe(@PathVariable String id, Model model) {
 		//keep the controllers clean - let the service convert the objects
 		model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
@@ -57,8 +54,7 @@ public class RecipeController {
 	}
 	
 	//@RequestMapping(name = "recipe", method = RequestMethod.POST)  - alternatively
-	@PostMapping
-	@RequestMapping("recipe")
+	@PostMapping("recipe")
 	public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
 		//@ModelAttribute tells Spring to bind the form post parameters to RecipeCommand object
 		RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
@@ -68,8 +64,7 @@ public class RecipeController {
 		
 	}
 	
-	@GetMapping
-	@RequestMapping("recipe/{id}/delete")
+	@GetMapping("recipe/{id}/delete")
 	public String deleteRecipeById(@PathVariable String id) {
 		
 		recipeService.deleteById(Long.valueOf(id));
