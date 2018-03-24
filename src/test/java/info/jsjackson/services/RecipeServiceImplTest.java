@@ -19,12 +19,11 @@ import info.jsjackson.domain.Difficulty;
 import info.jsjackson.domain.Notes;
 import info.jsjackson.domain.Recipe;
 import info.jsjackson.repositories.RecipeRepository;
+import info.jsjackson.exceptions.NotFoundException;
 
 public class RecipeServiceImplTest {
 
-	//RecipeServiceImpl recipeService;
 	RecipeService recipeService;
-	
 	
 	@Mock
 	RecipeRepository recipeRepository;
@@ -59,6 +58,25 @@ public class RecipeServiceImplTest {
 		//verify interactions
 		verify(recipeRepository, times(1)).findById(anyLong());
 		verify(recipeRepository, never()).findAll();
+		
+		
+	}
+	
+	@Test  (expected = NotFoundException.class)
+	public void getRecipeByIdTestNotFound() throws Exception {
+	
+		//Given
+		Optional<Recipe> recipeOptional = Optional.empty();
+		
+		when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+		
+		//When
+		Recipe recipeReturned = recipeService.findById(1L);
+		
+		//should go boom
+		
+		assertNull(recipeReturned);
+		verify(recipeRepository, times(1)).findById(anyLong());
 		
 		
 	}
