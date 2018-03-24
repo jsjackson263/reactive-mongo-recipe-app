@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 
 import info.jsjackson.commands.RecipeCommand;
 import info.jsjackson.domain.Recipe;
+import info.jsjackson.exceptions.NotFoundException;
 import info.jsjackson.services.RecipeService;
 
 public class RecipeControllerTest {
@@ -63,6 +64,16 @@ public class RecipeControllerTest {
 		.andExpect(MockMvcResultMatchers.model().attributeExists("recipe"))
 		.andReturn();
 				
+	}
+	
+	@Test
+	public void testGetRecipeNotFound() throws Exception {
+		
+		when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+		
+		mockMvc.perform(get("/recipe/1/show"))
+		.andExpect(status().isNotFound())
+		.andReturn();
 	}
 	
 	@Test
