@@ -14,6 +14,7 @@ import info.jsjackson.commands.RecipeCommand;
 import info.jsjackson.converters.RecipeCommandToRecipe;
 import info.jsjackson.converters.RecipeToRecipeCommand;
 import info.jsjackson.domain.Recipe;
+import info.jsjackson.exceptions.NotFoundException;
 import info.jsjackson.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,7 +55,8 @@ public class RecipeServiceImpl implements RecipeService {
 
 		Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 		if (!recipeOptional.isPresent()) {
-			throw new RuntimeException("Recipe Not Found");
+			//throw new RuntimeException("Recipe Not Found");
+			throw new NotFoundException("Recipe Not Found");
 		}
 		
 		return recipeOptional.get();
