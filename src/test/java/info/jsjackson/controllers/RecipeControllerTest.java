@@ -78,6 +78,17 @@ public class RecipeControllerTest {
 	}
 	
 	@Test
+	public void testGetRecipeNumberFormatException() throws Exception {
+	
+		//No need to mock the service operation here - we never get to the service 
+		mockMvc.perform(get("/recipe/xxx/show"))
+		.andExpect(status().isBadRequest())
+		.andExpect(view().name("400error"))
+		.andReturn();
+		
+	}
+	
+	@Test
 	public void testGetNewRecipeForm()  throws Exception {
 		
 		//Given
