@@ -89,7 +89,6 @@ public class RecipeController {
 		log.error(exception.getMessage());
 		
 		ModelAndView modelAndView = new ModelAndView();
-		
 		modelAndView.setViewName("404error");
 		modelAndView.addObject("exception", exception);
 		
@@ -97,7 +96,20 @@ public class RecipeController {
 		
 	}
 	
-	//TODO: Create another ExceptionHandler method to handle a NumberFormatException (BAD_REQUEST)
-	//When showById is passed a string instead of a numeric value	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(NumberFormatException.class)
+	public ModelAndView handleNumberFormat(Exception exception) {
+		
+		log.error("Handling Invalid Recipe Id - Numberformat Exception");
+		log.error(exception.getMessage());
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("400error");
+		modelAndView.addObject("exception", exception);
+		
+		return modelAndView;
+		
+	}
+	
 	
 }
