@@ -3,9 +3,12 @@
  */
 package info.jsjackson.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class RecipeController {
 	
-	RecipeService recipeService;
+	private final RecipeService recipeService;
+	private static final String RECIPE_RECIPEFORM_URL = "recipe/recipeform";
 
 	public RecipeController(RecipeService recipeService) {
 		this.recipeService = recipeService;
@@ -49,7 +53,7 @@ public class RecipeController {
 	@GetMapping("recipe/new")
 	public String newRecipe(Model model) {
 		model.addAttribute("recipe", new RecipeCommand());
-		return "recipe/recipeform";
+		return RECIPE_RECIPEFORM_URL;
 		//TODO: fix input tag for recipeForm
 	}
 
@@ -57,13 +61,21 @@ public class RecipeController {
 	public String updateRecipe(@PathVariable String id, Model model) {
 		//keep the controllers clean - let the service convert the objects
 		model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
-		return "recipe/recipeform";
+		return RECIPE_RECIPEFORM_URL;
 	}
 	
-	//@RequestMapping(name = "recipe", method = RequestMethod.POST)  - alternatively
+	/*@RequestMapping(name = "recipe", method = RequestMethod.POST)  - alternatively
+	  @ModelAttribute tells Spring to bind the form post parameters to RecipeCommand object */
 	@PostMapping("recipe")
-	public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
-		//@ModelAttribute tells Spring to bind the form post parameters to RecipeCommand object
+	public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult) {
+		
+		if (bindingResult.hasErrors()) {
+			bindingResult.getAllErrors().forEach(objectError -> {
+				log.debug(objectError.toString());
+			});
+			
+			return RECIPE_RECIPEFORM_URL; 
+		}
 		RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
 
 		//tell SpringMVC to redirect to a specific url
