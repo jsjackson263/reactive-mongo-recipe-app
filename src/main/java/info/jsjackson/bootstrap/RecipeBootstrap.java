@@ -140,7 +140,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 		//Holly Guacamole!
 		Recipe yummyGuacRecipe = new Recipe();
 		yummyGuacRecipe.setDescription("How to Make Perfect Guacamole");
-		yummyGuacRecipe.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
+		yummyGuacRecipe.setUrl("http://www.simplyrecipes.com/recipes/perfect_guacamole/");
 		yummyGuacRecipe.setServings(4);
 		yummyGuacRecipe.setSource("Simply Recipes");
 		
