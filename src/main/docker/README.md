@@ -2,15 +2,15 @@
 This directory contains Docker related content
 
 ## Contents of Docker-Compose/sf-guru folder on jobuntu:
-###springbootwebapp 
+### springbootwebapp 
 - contains a spring-boot app & a Dockerfile used to create an image for it.
 docker build -t spring-boot-docker .
 docker run -d -p 10300:10300 --name spring-boot-docker spring-boot-docker 
 
-###archive
+### archive
 - assignment: look for the error in the Dockerfile 
 
-###rabbit-mq
+### rabbit-mq
 docker run -d --hostname rabbitmq-guru --name rabbitmq-guru -p 15672:15672 -p 5671:5671 -p 5672:5672 rabbitmq:3-management 
 
 
@@ -35,4 +35,14 @@ docker run -it --link mysql-guru:mysql-guru --rm mysql sh -c 'exec mysql -h loca
 use the identified open socket to bind-mount a volume when creating the client:
 
 docker run -it --link mysql-guru:mysql-guru -v /var/lib/docker/overlay2/e864defcab0215166e2aedfc2ef1022e55cafefc9dd042176fef3dd66d79e852/merged/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock --rm mysql sh -c 'exec mysql -h localhost -P 3306 -u root -p ""'
+
+
+### Running SQL commands
+Once you're in, run sql commands as normal
+
+e.g.: show all users in mysql:
+
+SELECT User FROM mysql.user
+
+
 
