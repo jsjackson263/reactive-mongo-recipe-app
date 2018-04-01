@@ -38,7 +38,7 @@ docker run -it --link mysql-guru:mysql-guru -v /var/lib/docker/overlay2/e864defc
 
 
 ### Running SQL commands
-Once you're in, run sql commands as normal
+Once you're in, run sql commands as normal (see scripts folder):
 
 e.g.: show all users in mysql:
 
