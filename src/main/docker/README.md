@@ -1,5 +1,5 @@
 # Docker
-This directory contains Docker related content
+This directory contains Docker related content (personal notes - please ignore)
 
 ## Contents of Docker-Compose/sf-guru folder on jobuntu:
 ### springbootwebapp 
