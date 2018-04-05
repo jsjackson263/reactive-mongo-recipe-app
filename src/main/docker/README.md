@@ -42,7 +42,11 @@ Once you're in, run sql commands as normal (see scripts folder):
 
 e.g.: show all users in mysql:
 
-SELECT User FROM mysql.user
+SELECT User FROM mysql.user;
+
+use sfg_dev;
+show tables;
+
 
 
 
