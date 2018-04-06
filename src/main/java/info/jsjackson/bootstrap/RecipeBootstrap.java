@@ -267,4 +267,6 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 		
 		
 	}
+	
+	//XXX: When using MySQL DB, data load being duplicated - fit it  
 }
