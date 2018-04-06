@@ -46,6 +46,7 @@ SELECT User FROM mysql.user;
 
 use sfg_dev;
 show tables;
+select id, cook_time, description, difficulty, prep_time, servings, source, url from recipe;
 
 
 
