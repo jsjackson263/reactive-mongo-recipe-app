@@ -24,13 +24,13 @@ public class CategoryTest {
 		assertEquals(idValue, category.getId());
 	}
 
-	//@Test
+	@Test
 	@Ignore
 	public void testGetDescription() {
 		fail("Not yet implemented"); // TODO
 	}
 
-	//@Test
+	@Test
 	@Ignore
 	public void testGetRecipes() {
 		fail("Not yet implemented"); // TODO
