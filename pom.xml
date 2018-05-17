@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>info.jsjackson</groupId>
-	<artifactId>jsj-spring5-recipe-app</artifactId>
+	<artifactId>jsj-mongo-recipe-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>jsj-spring5-recipe-app</name>
-	<description>A Recipe Application</description>
+	<name>jsj-mongo-recipe-app</name>
+	<description>A Recipe Application using Mongo DB</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
