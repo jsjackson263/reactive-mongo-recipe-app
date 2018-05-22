@@ -13,6 +13,6 @@ import info.jsjackson.domain.UnitOfMeasure;
  * @author josan
  *
  */
-public interface UnitOfMeasureRepository extends CrudRepository<UnitOfMeasure, Long> {
+public interface UnitOfMeasureRepository extends CrudRepository<UnitOfMeasure, String> {
 	Optional<UnitOfMeasure> findByDescription(String description); 
 }

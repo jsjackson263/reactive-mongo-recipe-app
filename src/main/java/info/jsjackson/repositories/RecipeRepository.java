@@ -11,6 +11,6 @@ import info.jsjackson.domain.Recipe;
  * @author josan
  *
  */
-public interface RecipeRepository extends CrudRepository<Recipe, Long> {
+public interface RecipeRepository extends CrudRepository<Recipe, String> {
 
 }

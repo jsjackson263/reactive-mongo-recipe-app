@@ -43,7 +43,7 @@ public class RecipeController {
 	
 	@GetMapping("/recipe/{id}/show")
 	public String showById(@PathVariable String id, Model model) {
-		Recipe recipe = recipeService.findById(new Long(id));
+		Recipe recipe = recipeService.findById(id);
 		model.addAttribute("recipe", recipe);
 		
 		//return view name
@@ -60,7 +60,7 @@ public class RecipeController {
 	@GetMapping("/recipe/{id}/update")
 	public String updateRecipe(@PathVariable String id, Model model) {
 		//keep the controllers clean - let the service convert the objects
-		model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
+		model.addAttribute("recipe", recipeService.findCommandById(id));
 		return RECIPE_RECIPEFORM_URL;
 	}
 	
@@ -88,7 +88,7 @@ public class RecipeController {
 		
 		log.debug("Deleting id: " + id);
 		
-		recipeService.deleteById(Long.valueOf(id));
+		recipeService.deleteById(id);
 		return "redirect:/";
 		
 	}
