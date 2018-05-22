@@ -22,10 +22,10 @@ import info.jsjackson.domain.UnitOfMeasure;
  */
 public class IngredientCommandToIngredientTest {
 
-	static final Long ID = new Long(1L);
+	static final String ID = new String("1");
 	static final String DESCRIPTION = "description";
 	static final BigDecimal AMOUNT = new BigDecimal(10.50);
-	static final Long UOM_ID = new Long(2L);
+	static final String UOM_ID = new String("2");
 	static final Recipe RECIPE = new Recipe();
 
 	IngredientCommandToIngredient converter;

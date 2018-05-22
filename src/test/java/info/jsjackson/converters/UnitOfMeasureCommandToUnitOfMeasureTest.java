@@ -17,7 +17,7 @@ import info.jsjackson.domain.UnitOfMeasure;
  */
 public class UnitOfMeasureCommandToUnitOfMeasureTest {
 
-	static final Long LONG_VALUE = new Long(1L);
+	static final String LONG_VALUE = new String("1");
 	static final String DESCRIPTION = "description";
 	
 	UnitOfMeasureCommandToUnitOfMeasure converter;

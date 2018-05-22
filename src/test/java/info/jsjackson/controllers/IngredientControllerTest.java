@@ -1,10 +1,7 @@
 package info.jsjackson.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -56,10 +53,10 @@ public class IngredientControllerTest {
 
 		//Given
 		RecipeCommand recipeCommand = new RecipeCommand();
-		recipeCommand.setId(1L);
+		recipeCommand.setId("1");
 		
 		//When
-		when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 		
 		//Then
 		mockMvc.perform(get("/recipe/1/ingredients"))
@@ -75,10 +72,10 @@ public class IngredientControllerTest {
 		
 		//Given
 		IngredientCommand command = new IngredientCommand();
-		command.setId(1L);
+		command.setId("1");
 		
 		//When
-		when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(command);
+		when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(command);
 		
 		
 		//Then
@@ -94,10 +91,10 @@ public class IngredientControllerTest {
 		
 		//Given
 		RecipeCommand command = new RecipeCommand();
-		command.setId(1L);
+		command.setId("1");
 		
 		//When
-		when(recipeService.findCommandById(anyLong())).thenReturn(command);
+		when(recipeService.findCommandById(anyString())).thenReturn(command);
 		when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
 		
 		//Then
@@ -108,7 +105,7 @@ public class IngredientControllerTest {
 		.andExpect(model().attributeExists("uomList"))
 		.andReturn();
 				
-		verify(recipeService, times(1)).findCommandById(anyLong());
+		verify(recipeService, times(1)).findCommandById(anyString());
 		
 		
 	}
@@ -119,14 +116,14 @@ public class IngredientControllerTest {
 		
 		//Given
 		IngredientCommand command = new IngredientCommand();
-		command.setId(3L);
+		command.setId("3");
 		command.setAmount(new BigDecimal(1.0));
 		command.setDescription("Description");
-		command.setRecipeId(1L);
+		command.setRecipeId("1");
 		//command.setUnitOfMeasure(new UnitOfMeasure());
 		
 		//When
-		when(ingredientService.findByRecipeIdAndIngredientId(anyLong(),  anyLong())).thenReturn(command);
+		when(ingredientService.findByRecipeIdAndIngredientId(anyString(),  anyString())).thenReturn(command);
 		when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
 		
 		//Then
@@ -143,8 +140,8 @@ public class IngredientControllerTest {
 	    public void testSaveOrUpdate() throws Exception {
 	        //given
 	        IngredientCommand command = new IngredientCommand();
-	        command.setId(3L);
-	        command.setRecipeId(2L);
+	        command.setId("3");
+	        command.setRecipeId("2");
 
 	        //when
 	        when(ingredientService.saveIngredientCommand(any())).thenReturn(command);
@@ -169,7 +166,7 @@ public class IngredientControllerTest {
 		.andExpect(view().name("redirect:/recipe/2/ingredients"))
 		.andReturn();
 
-		verify(ingredientService, times(1)).deleteById(anyLong(), anyLong());
+		verify(ingredientService, times(1)).deleteById(anyString(), anyString());
 	}
 
 }

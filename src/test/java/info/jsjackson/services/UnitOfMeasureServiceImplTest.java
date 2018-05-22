@@ -38,15 +38,15 @@ public class UnitOfMeasureServiceImplTest {
 		
 		//Given
 		UnitOfMeasure uom1 = new UnitOfMeasure();
-		uom1.setId(1L);
+		uom1.setId("1");
 		uom1.setDescription("UOM Description1");
 		
 		UnitOfMeasure uom2 = new UnitOfMeasure();
-		uom2.setId(2L);
+		uom2.setId("2");
 		uom2.setDescription("UOM Description2");
 		
 		UnitOfMeasure uom3 = new UnitOfMeasure();
-		uom3.setId(3L);
+		uom3.setId("3");
 		uom3.setDescription("UOM Description3");
 		
 		Set<UnitOfMeasure> uomList = new HashSet<>();

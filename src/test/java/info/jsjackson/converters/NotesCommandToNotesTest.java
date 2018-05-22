@@ -17,7 +17,7 @@ import info.jsjackson.domain.Notes;
  */
 public class NotesCommandToNotesTest {
 
-	static final Long ID = new Long(1L);
+	static final String ID = new String("1");
 	static final String RECIPE_NOTES = "recipe notes";
 	
 	NotesCommandToNotes converter;

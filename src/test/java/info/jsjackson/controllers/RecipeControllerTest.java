@@ -2,10 +2,7 @@ package info.jsjackson.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,10 +51,10 @@ public class RecipeControllerTest {
 	public void testGetRecipe() throws Exception {
 		//Given
 		Recipe recipe = new Recipe();
-		recipe.setId(2L);
+		recipe.setId("2");
 
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		when(recipeService.findById(anyLong())).thenReturn(recipe);
+		when(recipeService.findById(anyString())).thenReturn(recipe);
 		
 		//When, Then ?
 		mockMvc.perform(get("/recipe/2/show"))
@@ -71,7 +68,7 @@ public class RecipeControllerTest {
 	@Test
 	public void testGetRecipeNotFound() throws Exception {
 		
-		when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+		when(recipeService.findById(anyString())).thenThrow(NotFoundException.class);
 		
 		mockMvc.perform(get("/recipe/1/show"))
 		.andExpect(status().isNotFound())
@@ -112,7 +109,7 @@ public class RecipeControllerTest {
 		
 		//Given
 		RecipeCommand command = new RecipeCommand();
-		command.setId(2L);
+		command.setId("2");
 		
 		//When/Then
 		when(recipeService.saveRecipeCommand(any())).thenReturn(command);
@@ -134,7 +131,7 @@ public class RecipeControllerTest {
 		
 		//Given
 		RecipeCommand command = new RecipeCommand();
-		command.setId(2L);
+		command.setId("2");
 		
 		//When/Then
 		when(recipeService.saveRecipeCommand(any())).thenReturn(command);
@@ -157,9 +154,9 @@ public class RecipeControllerTest {
 	public void testGetUpdateView() throws Exception {
 		
 		RecipeCommand command = new RecipeCommand();
-		command.setId(5L);
+		command.setId("5");
 		
-		when(recipeService.findCommandById(anyLong())).thenReturn(command);
+		when(recipeService.findCommandById(anyString())).thenReturn(command);
 		
 		mockMvc.perform(get("/recipe/1/update"))
 		.andExpect(status().isOk())
@@ -168,7 +165,7 @@ public class RecipeControllerTest {
 		.andReturn();
 		
 		//verify interactions - additional testing
-		 verify(recipeService, times(1)).findCommandById(anyLong());
+		 verify(recipeService, times(1)).findCommandById(anyString());
 		 verifyNoMoreInteractions(recipeService);
 	
 	}
@@ -185,7 +182,7 @@ public class RecipeControllerTest {
 		.andExpect(view().name("redirect:/"))
 		.andReturn();
 		
-		verify(recipeService, times(1)).deleteById(anyLong());
+		verify(recipeService, times(1)).deleteById(anyString());
 		
 	}
 	

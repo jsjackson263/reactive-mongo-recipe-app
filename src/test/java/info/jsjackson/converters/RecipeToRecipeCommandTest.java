@@ -23,7 +23,7 @@ public class RecipeToRecipeCommandTest {
 
 	RecipeToRecipeCommand converter;
 	
-	static final Long ID = new Long(1L);
+	static final String ID = new String("1");
 	static final String DESCRIPTION = "My Recipe";
 	static final Integer PREP_TIME = Integer.valueOf("10");
 	static final Integer COOK_TIME = Integer.valueOf("20");
@@ -32,12 +32,12 @@ public class RecipeToRecipeCommandTest {
 	static final String URL = "www.example.com";
 	static final String DIRECTIONS = "Directions";
 	static final Difficulty DIFFICULTY = Difficulty.EASY;
-	static final Long INGRED_ID_1 = 1L;
-	static final Long INGRED_ID_2 = 2L;
-	static final Long INGRED_ID_3 = 3L;
-	static final Long NOTES_ID = 20L;
-	static final Long CAT_ID_1 = 1L;
-	static final Long CAT_ID_2 = 2L;
+	static final String INGRED_ID_1 = "1";
+	static final String INGRED_ID_2 = "2";
+	static final String INGRED_ID_3 = "3";
+	static final String NOTES_ID = "20";
+	static final String CAT_ID_1 = "1";
+	static final String CAT_ID_2 = "2";
 	
 	/**
 	 * @throws java.lang.Exception

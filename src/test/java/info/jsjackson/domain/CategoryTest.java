@@ -18,7 +18,7 @@ public class CategoryTest {
 	
 	@Test
 	public void testGetId() {
-		Long idValue = 4l;
+		String idValue = "4";
 		
 		category.setId(idValue);
 		assertEquals(idValue, category.getId());

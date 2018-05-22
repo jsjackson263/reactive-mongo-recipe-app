@@ -61,9 +61,9 @@ public class ImageControllerTest {
 		
 		//Given
 		RecipeCommand recipeCommand = new RecipeCommand();
-		recipeCommand.setId(2L);
+		recipeCommand.setId("2");
 		
-		when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 		
 		//When
 		mockMvc.perform(get("/recipe/2/image"))
@@ -72,7 +72,7 @@ public class ImageControllerTest {
 		.andReturn();
 		
 		//Then
-		verify(recipeService, times(1)).findCommandById(anyLong());
+		verify(recipeService, times(1)).findCommandById(anyString());
 	
 	}
 
@@ -88,7 +88,7 @@ public class ImageControllerTest {
 		.andReturn();
 		
 		
-		verify(imageService, times(1)).saveImageFile(anyLong(), any());
+		verify(imageService, times(1)).saveImageFile(anyString(), any());
 	
 	}
 
@@ -98,7 +98,7 @@ public class ImageControllerTest {
 		
 		//Given
 		RecipeCommand recipeCommand = new RecipeCommand();
-		recipeCommand.setId(3L);
+		recipeCommand.setId("3");
 		
 		//NOTE: could have used an actual image here, but we just need the byte array
 		String fakeImage = "fake image text";  
@@ -110,7 +110,7 @@ public class ImageControllerTest {
 		}
 		recipeCommand.setImage(bytesBoxed);
 		
-		when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 		
 		
 		//When

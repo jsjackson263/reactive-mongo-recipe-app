@@ -2,7 +2,6 @@ package info.jsjackson.controllers;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-//import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -63,7 +62,7 @@ public class IndexControllerTest {
 		recipes.add(new Recipe());
 		
 		Recipe recipe2 = new Recipe();
-		recipe2.setId(123L);
+		recipe2.setId("123");
 		recipes.add(recipe2);
 		
 		when(recipeService.getRecipes()).thenReturn(recipes);
