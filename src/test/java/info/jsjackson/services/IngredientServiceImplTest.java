@@ -89,9 +89,9 @@ public class IngredientServiceImplTest {
 		
 		IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId("1",  "3");		
 		//Then
-		assertEquals(Long.valueOf(3L), ingredientCommand.getId());
+		assertEquals("3", ingredientCommand.getId());
 		assertEquals("ingredient 3", ingredientCommand.getDescription());
-		assertEquals(Long.valueOf(1L), ingredientCommand.getRecipeId());
+		assertEquals("1", ingredientCommand.getRecipeId());
 		
 		verify(recipeRepository, times(1)).findById("1");
 		
@@ -123,10 +123,10 @@ public class IngredientServiceImplTest {
 		
 		
 		//Then
-		assertEquals(Long.valueOf(3L), savedCommand.getId());
+		assertEquals("3", savedCommand.getId());
 		assertEquals("ingredient 3", savedCommand.getDescription());
 		assertEquals(new BigDecimal(2.2), savedCommand.getAmount());
-		assertEquals(Long.valueOf(2L), savedCommand.getRecipeId());
+		assertEquals("2", savedCommand.getRecipeId());
 		verify(recipeRepository, times(1)).findById(anyString());
 		verify(recipeRepository, times(1)).save(any(Recipe.class));
 		

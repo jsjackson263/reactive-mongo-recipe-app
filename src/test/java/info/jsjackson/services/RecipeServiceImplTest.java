@@ -99,7 +99,7 @@ public class RecipeServiceImplTest {
 		
 		//Then
 		assertNotNull("null RecipeCommand Returned", returnedRecipeCommand);
-		assertEquals(Long.valueOf(2L), returnedRecipeCommand.getId());
+		assertEquals("2", returnedRecipeCommand.getId());
 		
 		verify(recipeRepository, times(1)).findById(anyString());
 		verify(recipeRepository, never()).findAll();
@@ -171,7 +171,7 @@ public class RecipeServiceImplTest {
 		
 		//Then
 		assertNotNull("saved recipe not null", returnedRecipeCommand);
-		assertEquals(Long.valueOf(2L), returnedRecipeCommand.getId());
+		assertEquals("2", returnedRecipeCommand.getId());
 		
 		
 		//Testing updateService will be the same as this test
