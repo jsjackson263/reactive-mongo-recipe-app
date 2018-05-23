@@ -6,4 +6,3 @@
 
 A Spring5 Recipe Application Using MongoDB - an example application built using Spring Framework 5
 
-remove all JPA-related annotations
