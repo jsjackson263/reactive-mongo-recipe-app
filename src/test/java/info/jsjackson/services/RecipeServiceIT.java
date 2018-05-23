@@ -5,6 +5,7 @@ package info.jsjackson.services;
 
 import static org.junit.Assert.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import info.jsjackson.repositories.RecipeRepository;
  * @author josan 
  *
  */
+@Ignore
 @RunWith(SpringRunner.class)
 //@DataJpaTest
 @SpringBootTest
