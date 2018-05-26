@@ -91,7 +91,6 @@ public class IngredientServiceImplTest {
 		//Then
 		assertEquals("3", ingredientCommand.getId());
 		assertEquals("ingredient 3", ingredientCommand.getDescription());
-		assertEquals("1", ingredientCommand.getRecipeId());
 		
 		verify(recipeRepository, times(1)).findById("1");
 		
@@ -126,7 +125,6 @@ public class IngredientServiceImplTest {
 		assertEquals("3", savedCommand.getId());
 		assertEquals("ingredient 3", savedCommand.getDescription());
 		assertEquals(new BigDecimal(2.2), savedCommand.getAmount());
-		assertEquals("2", savedCommand.getRecipeId());
 		verify(recipeRepository, times(1)).findById(anyString());
 		verify(recipeRepository, times(1)).save(any(Recipe.class));
 		

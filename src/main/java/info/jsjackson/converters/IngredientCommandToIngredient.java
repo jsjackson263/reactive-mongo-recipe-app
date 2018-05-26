@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import info.jsjackson.commands.IngredientCommand;
 import info.jsjackson.domain.Ingredient;
+import info.jsjackson.domain.Recipe;
 import lombok.Synchronized;
 
 /**
@@ -35,6 +36,12 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
 		
 		final Ingredient ingredient = new Ingredient();
 		ingredient.setId(command.getId());
+		if (command.getRecipeId() != null) { //XXX:this block doesn't make sense
+			Recipe recipe = new Recipe();
+			recipe.setId(command.getRecipeId());
+			recipe.addIngredient(ingredient);
+			
+		}
 		ingredient.setDescription(command.getDescription());
 		ingredient.setAmount(command.getAmount());
 		ingredient.setUom(uomConverter.convert(command.getUnitOfMeasure()));

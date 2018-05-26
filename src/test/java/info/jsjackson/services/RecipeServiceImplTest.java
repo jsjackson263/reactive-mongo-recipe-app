@@ -128,10 +128,6 @@ public class RecipeServiceImplTest {
 		
 		//Given
 		Recipe recipe = new Recipe();
-		Notes notes = new Notes();
-		notes.setId("12");
-		notes.setRecipeNotes("recipeNotes");
-		notes.setRecipe(recipe);
 		recipe.setCookTime(10);
 		recipe.setDescription("Description");
 		recipe.setDifficulty(Difficulty.EASY);

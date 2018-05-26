@@ -99,7 +99,7 @@ public class IngredientServiceImpl implements IngredientService {
               //no ingredient found in DB - add new Ingredient
                 //recipe.addIngredient(ingredientCommandToIngredient.convert(command));
 				Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
-				ingredient.setRecipe(recipe);
+				//ingredient.setRecipe(recipe);
 				recipe.addIngredient(ingredient);
 			}
 			 
@@ -154,7 +154,7 @@ public class IngredientServiceImpl implements IngredientService {
 			if (ingredientOptional.isPresent()) {
 				Ingredient ingredient = ingredientOptional.get();
 				log.debug("Found ingredient: " + ingredient.toString());
-				ingredient.setRecipe(null);
+				//ingredient.setRecipe(null);
 				recipe.getIngredients().remove(recipeOptional.get());
 				recipeRepository.save(recipe);
 			}
