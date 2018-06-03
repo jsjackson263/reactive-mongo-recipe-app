@@ -22,7 +22,7 @@ import lombok.ToString;
 @ToString
 public class Ingredient {
 
-	@Id
+	//ingredient is a nested list inside Recipe document, so doesn't get an id value (even if annotated). 
 	private String id = UUID.randomUUID().toString();
 	
 	private String description;
