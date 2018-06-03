@@ -51,11 +51,10 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 	//this method, so that everything runs within the same transactional boundaries 
 	@Transactional  
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent paramE) {
+	public void onApplicationEvent(ContextRefreshedEvent event) {
 		 loadCategories();
 		 loadUom();
 		
-		log.debug("Event Source: " + paramE.getSource().toString());
 		List<Recipe> recipes = getRecipes();
 		log.debug("Loading Bootstrap Data");
 		recipeRepository.saveAll(recipes);
