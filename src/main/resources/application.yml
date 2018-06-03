@@ -6,3 +6,7 @@ spring:
     mongodb:
       host: localhost 
       port: 0  #random port
+      
+logging:
+  level:
+    root: debug
