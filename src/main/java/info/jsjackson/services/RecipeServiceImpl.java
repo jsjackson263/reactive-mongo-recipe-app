@@ -59,6 +59,7 @@ public class RecipeServiceImpl implements RecipeService {
 			throw new NotFoundException("Recipe Not Found for ID Value: " + id.toString());
 		}
 		
+		log.debug("Recipe found in DB: " + recipeOptional.get().toString());
 		return recipeOptional.get();
 		
 	}

@@ -17,6 +17,7 @@ import info.jsjackson.domain.Difficulty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author josan 
@@ -24,6 +25,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 public class RecipeCommand {
 

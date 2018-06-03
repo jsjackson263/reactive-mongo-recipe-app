@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author josan
@@ -14,6 +15,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 public class Notes {
 
 	@Id
