@@ -3,9 +3,8 @@
  */
 package info.jsjackson.services;
 
-import java.util.Set;
-
 import info.jsjackson.commands.UnitOfMeasureCommand;
+import reactor.core.publisher.Flux;
 
 /**
  * @author josan 
@@ -13,5 +12,5 @@ import info.jsjackson.commands.UnitOfMeasureCommand;
  */
 public interface UnitOfMeasureService {
 
-	Set<UnitOfMeasureCommand> listAllUoms();
+	Flux<UnitOfMeasureCommand> listAllUoms();
 }

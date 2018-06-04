@@ -25,6 +25,9 @@ import info.jsjackson.domain.Ingredient;
 import info.jsjackson.domain.Recipe;
 import info.jsjackson.repositories.RecipeRepository;
 import info.jsjackson.repositories.UnitOfMeasureRepository;
+import info.jsjackson.repositories.reactive.RecipeReactiveRepository;
+import info.jsjackson.repositories.reactive.UnitOfMeasureReactiveRepository;
+import reactor.core.publisher.Mono;
 
 /**
  * @author josan 
@@ -36,7 +39,10 @@ public class IngredientServiceImplTest {
 	RecipeRepository recipeRepository;
 	
 	@Mock
-	UnitOfMeasureRepository unitOfMeasureRepository;
+	RecipeReactiveRepository recipeReactiveRepository;
+	
+	@Mock
+	UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
 	
 	IngredientToIngredientCommand ingredientToIngredientCommand;
 	IngredientCommandToIngredient ingredientCommandToIngredient;
@@ -55,7 +61,8 @@ public class IngredientServiceImplTest {
 		ingredientCommandToIngredient = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
 		
 		ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, 
-				ingredientCommandToIngredient, recipeRepository, unitOfMeasureRepository);
+				ingredientCommandToIngredient, recipeRepository, 
+				unitOfMeasureReactiveRepository, recipeReactiveRepository);
 		
 	}
 
@@ -85,14 +92,14 @@ public class IngredientServiceImplTest {
 		Optional<Recipe> recipeOptional = Optional.of(recipe);
 		
 		//When
-		when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
+		when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(recipe));
 		
-		IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId("1",  "3");		
+		IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId("1",  "3").block();		
 		//Then
 		assertEquals("3", ingredientCommand.getId());
 		assertEquals("ingredient 3", ingredientCommand.getDescription());
 		
-		verify(recipeRepository, times(1)).findById("1");
+		verify(recipeReactiveRepository, times(1)).findById("1");
 		
 	}
 	
@@ -115,10 +122,10 @@ public class IngredientServiceImplTest {
 		savedRecipe.getIngredients().iterator().next().setAmount(new BigDecimal(2.2));
 		
 		when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
-		when(recipeRepository.save(any())).thenReturn(savedRecipe);
+		when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
 		
 		//When
-		IngredientCommand savedCommand = ingredientService.saveIngredientCommand(ingredientCommand);
+		IngredientCommand savedCommand = ingredientService.saveIngredientCommand(ingredientCommand).block();
 		
 		
 		//Then
@@ -126,7 +133,7 @@ public class IngredientServiceImplTest {
 		assertEquals("ingredient 3", savedCommand.getDescription());
 		assertEquals(new BigDecimal(2.2), savedCommand.getAmount());
 		verify(recipeRepository, times(1)).findById(anyString());
-		verify(recipeRepository, times(1)).save(any(Recipe.class));
+		verify(recipeReactiveRepository, times(1)).save(any(Recipe.class));
 		
 		
 		

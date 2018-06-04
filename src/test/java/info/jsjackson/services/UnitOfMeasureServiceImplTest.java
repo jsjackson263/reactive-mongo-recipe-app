@@ -1,11 +1,12 @@
 package info.jsjackson.services;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
@@ -16,21 +17,21 @@ import org.mockito.MockitoAnnotations;
 import info.jsjackson.commands.UnitOfMeasureCommand;
 import info.jsjackson.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import info.jsjackson.domain.UnitOfMeasure;
-import info.jsjackson.repositories.UnitOfMeasureRepository;
+import info.jsjackson.repositories.reactive.UnitOfMeasureReactiveRepository;
+import reactor.core.publisher.Flux;
 
 public class UnitOfMeasureServiceImplTest {
 
 	@Mock
-	UnitOfMeasureRepository repository;
+	UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
 	
 	UnitOfMeasureService unitOfMeasureService;
-	UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand;
+	UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand = new UnitOfMeasureToUnitOfMeasureCommand();;
 	
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		unitOfMeasureToUnitOfMeasureCommand = new UnitOfMeasureToUnitOfMeasureCommand();
-		unitOfMeasureService = new UnitOfMeasureServiceImpl(repository, unitOfMeasureToUnitOfMeasureCommand);
+		unitOfMeasureService = new UnitOfMeasureServiceImpl(unitOfMeasureReactiveRepository, unitOfMeasureToUnitOfMeasureCommand);
 	}
 
 	@Test
@@ -54,15 +55,16 @@ public class UnitOfMeasureServiceImplTest {
 		uomList.add(uom2);
 		uomList.add(uom3);
 		
-		//When
-		when(repository.findAll()).thenReturn(uomList);
+		when(unitOfMeasureReactiveRepository.findAll()).thenReturn(Flux.just(uom1, uom2, uom3));
 		
-		Set<UnitOfMeasureCommand> uomCommandList = unitOfMeasureService.listAllUoms();
+		
+		//When
+		List<UnitOfMeasureCommand> uomCommandList = unitOfMeasureService.listAllUoms().collectList().block();
 		
 		
 		//Then
 		assertEquals(3, uomCommandList.size());
-		verify(repository, times(1)).findAll();
+		verify(unitOfMeasureReactiveRepository, times(1)).findAll();
 		
 	
 	}

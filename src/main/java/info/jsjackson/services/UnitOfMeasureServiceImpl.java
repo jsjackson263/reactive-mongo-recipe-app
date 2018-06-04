@@ -3,16 +3,13 @@
  */
 package info.jsjackson.services;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.stereotype.Service;
 
 import info.jsjackson.commands.UnitOfMeasureCommand;
 import info.jsjackson.converters.UnitOfMeasureToUnitOfMeasureCommand;
-import info.jsjackson.domain.UnitOfMeasure;
-import info.jsjackson.repositories.UnitOfMeasureRepository;
+import info.jsjackson.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 
 /**
  * @author josan 
@@ -22,27 +19,25 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
 
-	private final UnitOfMeasureRepository unitOfMeasureRepository;
+	private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
 	private final UnitOfMeasureToUnitOfMeasureCommand  unitOfMeasureToUnitOfMeasureCommand;
 
-	public UnitOfMeasureServiceImpl(UnitOfMeasureRepository unitOfMeasureRepository,
+	public UnitOfMeasureServiceImpl(UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository,
 			UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand) {
-		this.unitOfMeasureRepository = unitOfMeasureRepository;
+		this.unitOfMeasureReactiveRepository = unitOfMeasureReactiveRepository;
 		this.unitOfMeasureToUnitOfMeasureCommand = unitOfMeasureToUnitOfMeasureCommand;
 	}
 
 
 	@Override
-	public Set<UnitOfMeasureCommand> listAllUoms() {
+	public Flux<UnitOfMeasureCommand> listAllUoms() {
 
-		Set<UnitOfMeasureCommand> uomCommandList = new HashSet<>();
-		
-		Iterable<UnitOfMeasure> uomSet = unitOfMeasureRepository.findAll();
-		uomSet.iterator().forEachRemaining((uom) -> uomCommandList.add(unitOfMeasureToUnitOfMeasureCommand.convert(uom)));  //TODO: Hurray!!
+		Flux<UnitOfMeasureCommand> uomCommandList = unitOfMeasureReactiveRepository
+				.findAll()
+				.map(unitOfMeasureToUnitOfMeasureCommand::convert);
 		
 		
 		/*
-		 * John's implementation - too crisp for me
 		 * 
 		 * return StreamSupport.stream(unitOfMeasureRepository.findAll()
                 .spliterator(), false)

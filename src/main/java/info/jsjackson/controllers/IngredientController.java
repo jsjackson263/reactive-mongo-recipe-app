@@ -4,6 +4,7 @@
 package info.jsjackson.controllers;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Controller;
@@ -53,7 +54,7 @@ public class IngredientController {
 	public String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 		
 		IngredientCommand ingredientCommand = 
-				ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId);
+				ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId).block();
 		
 		model.addAttribute("ingredient", ingredientCommand);
 		
@@ -74,7 +75,7 @@ public class IngredientController {
 		
 		//init UOM
 		ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
-		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
 		
 		return "recipe/ingredient/ingredientform";
 		
@@ -88,10 +89,10 @@ public class IngredientController {
 			Model model) {
 		
 		IngredientCommand ingredientcommand = 
-				ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId);
+				ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId).block();
 		model.addAttribute("ingredient", ingredientcommand);
 		
-		Set<UnitOfMeasureCommand> unitOfMeasureSet = unitOfMeasureService.listAllUoms();
+		List<UnitOfMeasureCommand> unitOfMeasureSet = unitOfMeasureService.listAllUoms().collectList().block();
 		model.addAttribute("uomList", unitOfMeasureSet);
 		
 		
@@ -101,7 +102,7 @@ public class IngredientController {
 	
 	@PostMapping("recipe/{recipeId}/ingredient")
     public String saveOrUpdate(@ModelAttribute IngredientCommand command){
-        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
 
         log.debug("saved ingredient id:" + savedCommand.getId());
 
@@ -112,7 +113,7 @@ public class IngredientController {
 	public String deleteIngredient(@PathVariable String recipeId, @PathVariable String ingredientId) {
 		
 		log.debug("In Controller - deleting Ingredient Id:  " + ingredientId + " for Recipe Id :" + recipeId);
-		ingredientService.deleteById(recipeId, ingredientId);
+		ingredientService.deleteById(recipeId, ingredientId).block();
 		
 		return "redirect:/recipe/" + recipeId + "/ingredients";
 	}
