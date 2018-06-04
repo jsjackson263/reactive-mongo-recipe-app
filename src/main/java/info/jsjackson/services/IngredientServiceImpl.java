@@ -29,20 +29,17 @@ public class IngredientServiceImpl implements IngredientService {
 
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
 	private final IngredientCommandToIngredient ingredientCommandToIngredient;
-	private final RecipeRepository recipeRepository;
 	private final RecipeReactiveRepository recipeReactiveRepository;
 	private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
 	
 	public IngredientServiceImpl(IngredientToIngredientCommand ingredientToIngredientCommand,
 			IngredientCommandToIngredient ingredientCommandToIngredient, 
-			RecipeRepository recipeRepository,
-			UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository,
-			RecipeReactiveRepository recipeReactiveRepository) {
+			RecipeReactiveRepository recipeReactiveRepository,
+			UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository) {
 		this.ingredientToIngredientCommand = ingredientToIngredientCommand;
 		this.ingredientCommandToIngredient = ingredientCommandToIngredient;
 		this.recipeReactiveRepository = recipeReactiveRepository;
 		this.unitOfMeasureReactiveRepository = unitOfMeasureReactiveRepository;
-		this.recipeRepository = recipeRepository;
 	}
 
 
@@ -91,15 +88,15 @@ public class IngredientServiceImpl implements IngredientService {
 	@Override
 	public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand ingredientCommand) {
 
-		Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
-		if (!recipeOptional.isPresent()) {
+		Recipe recipe = recipeReactiveRepository.findById(ingredientCommand.getRecipeId()).block();
+		
+		if (recipe == null) {
 			//recipe not found in DB
 			//TODO: toss error if not found!
 			log.error("Recipe not found for id: " + ingredientCommand.getRecipeId());
 			return Mono.just(new IngredientCommand());
 		} else {
 			//we found a recipe in DB - get ingredient that matches the id presented
-			Recipe recipe = recipeOptional.get();
 			Optional<Ingredient> ingredientOptional = recipe
 	                    .getIngredients()
 	                    .stream()
@@ -161,11 +158,10 @@ public class IngredientServiceImpl implements IngredientService {
 	@Override
 	public Mono<Void> deleteById(String recipeId, String ingredientId) {
 		
-		log.error("In Service - Deleting Ingredient: " + ingredientId + " for recipeId: " + recipeId);
+		log.debug("In Service - Deleting Ingredient: " + ingredientId + " for recipeId: " + recipeId);
 		
-		Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
-		if (recipeOptional.isPresent()) {
-			Recipe recipe = recipeOptional.get();
+		Recipe recipe = recipeReactiveRepository.findById(recipeId).block();
+		if (recipe != null) {
 			//TODO:the log statement below causes a StackOverflowError when domain objects
 			//are annotated with @Data, instead of @Getter/@Setter. find out why
 			log.debug("Found recipe: " + recipe.toString()); 
@@ -182,7 +178,7 @@ public class IngredientServiceImpl implements IngredientService {
 				log.debug("Found ingredient: " + ingredient.toString());
 				//ingredient.setRecipe(null);
 				recipe.getIngredients().remove(ingredientOptional.get());
-				recipeRepository.save(recipe);
+				recipeReactiveRepository.save(recipe);
 			}
 		} else {
 			//recipe not found in DB

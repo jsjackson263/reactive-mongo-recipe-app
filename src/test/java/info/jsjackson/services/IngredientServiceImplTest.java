@@ -36,9 +36,6 @@ import reactor.core.publisher.Mono;
 public class IngredientServiceImplTest {
 
 	@Mock
-	RecipeRepository recipeRepository;
-	
-	@Mock
 	RecipeReactiveRepository recipeReactiveRepository;
 	
 	@Mock
@@ -60,9 +57,8 @@ public class IngredientServiceImplTest {
 		ingredientToIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
 		ingredientCommandToIngredient = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
 		
-		ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, 
-				ingredientCommandToIngredient, recipeRepository, 
-				unitOfMeasureReactiveRepository, recipeReactiveRepository);
+		ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand, ingredientCommandToIngredient, 
+				recipeReactiveRepository, unitOfMeasureReactiveRepository);
 		
 	}
 
@@ -121,7 +117,7 @@ public class IngredientServiceImplTest {
 		savedRecipe.getIngredients().iterator().next().setDescription("ingredient 3");
 		savedRecipe.getIngredients().iterator().next().setAmount(new BigDecimal(2.2));
 		
-		when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
+		when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(new Recipe()));
 		when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
 		
 		//When
@@ -132,7 +128,7 @@ public class IngredientServiceImplTest {
 		assertEquals("3", savedCommand.getId());
 		assertEquals("ingredient 3", savedCommand.getDescription());
 		assertEquals(new BigDecimal(2.2), savedCommand.getAmount());
-		verify(recipeRepository, times(1)).findById(anyString());
+		verify(recipeReactiveRepository, times(1)).findById(anyString());
 		verify(recipeReactiveRepository, times(1)).save(any(Recipe.class));
 		
 		
@@ -165,7 +161,7 @@ public class IngredientServiceImplTest {
 		
 		Optional<Recipe> recipeOptional = Optional.of(recipe);
 		
-		when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
+		when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(recipe));
 		
 		//When
 		ingredientService.deleteById("1", "3");
@@ -173,8 +169,8 @@ public class IngredientServiceImplTest {
 		//Then
 		//assertEquals(2, recipe.getIngredients().size());  //TODO why is this assertion failing?
 		
-		verify(recipeRepository, times(1)).findById(anyString());
-		verify(recipeRepository, times(1)).save(any(Recipe.class));
+		verify(recipeReactiveRepository, times(1)).findById(anyString());
+		verify(recipeReactiveRepository, times(1)).save(any(Recipe.class));
 		
 	}
 	
