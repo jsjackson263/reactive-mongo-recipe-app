@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import info.jsjackson.commands.RecipeCommand;
 import info.jsjackson.services.ImageService;
 import info.jsjackson.services.RecipeService;
+import reactor.core.publisher.Mono;
 
 /**
  * @author josan 
@@ -63,7 +64,7 @@ public class ImageControllerTest {
 		RecipeCommand recipeCommand = new RecipeCommand();
 		recipeCommand.setId("2");
 		
-		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
 		
 		//When
 		mockMvc.perform(get("/recipe/2/image"))
@@ -81,6 +82,8 @@ public class ImageControllerTest {
 		
 		MockMultipartFile multipartFile = new MockMultipartFile(
 				"imagefile", "testing.txt", "text/plain",  "Spring Framework Guru".getBytes()) ;
+		
+		when(imageService.saveImageFile(anyString(),  any())).thenReturn(Mono.empty());
 		
 		mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
 		.andExpect(status().is3xxRedirection())
@@ -110,7 +113,7 @@ public class ImageControllerTest {
 		}
 		recipeCommand.setImage(bytesBoxed);
 		
-		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
 		
 		
 		//When

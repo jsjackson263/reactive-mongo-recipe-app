@@ -3,9 +3,7 @@
  */
 package info.jsjackson.controllers;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import info.jsjackson.commands.IngredientCommand;
 import info.jsjackson.commands.RecipeCommand;
@@ -66,7 +63,7 @@ public class IngredientController {
 	public String newIngredient(@PathVariable String recipeId, Model model) {
 		
 		//make sure we have a good id value
-		RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
+		RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
 		//TODO: raise exception if null
 		
 		//need to turn back parent id for hidden form property

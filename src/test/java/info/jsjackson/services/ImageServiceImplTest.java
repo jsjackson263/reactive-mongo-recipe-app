@@ -3,11 +3,12 @@
  */
 package info.jsjackson.services;
 
-import static org.hamcrest.CoreMatchers.any;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import java.util.Optional;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import info.jsjackson.domain.Recipe;
-import info.jsjackson.repositories.RecipeRepository;
+import info.jsjackson.repositories.reactive.RecipeReactiveRepository;
+import reactor.core.publisher.Mono;
 
 /**
  * @author josan 
@@ -27,7 +29,7 @@ import info.jsjackson.repositories.RecipeRepository;
 public class ImageServiceImplTest {
 
 	@Mock
-	RecipeRepository recipeRespository;
+	RecipeReactiveRepository recipeReactiveRepository;
 	
 	ImageService imageService;
 	
@@ -37,7 +39,7 @@ public class ImageServiceImplTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		imageService = new ImageServiceImpl(recipeRespository);
+		imageService = new ImageServiceImpl(recipeReactiveRepository);
 		
 	}
 
@@ -51,19 +53,19 @@ public class ImageServiceImplTest {
 		
 		Recipe recipe = new Recipe();
 		recipe.setId("2");
-		Optional<Recipe> recipeOptional = Optional.of(recipe);
 		
-		when(recipeRespository.findById(anyString())).thenReturn(recipeOptional);
+		when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(recipe));
+		when(recipeReactiveRepository.save(any(Recipe.class))).thenReturn(Mono.just(recipe));
 		
 		ArgumentCaptor<Recipe> argumentCaptor = ArgumentCaptor.forClass(Recipe.class);
 		
 		//When
-		imageService.saveImageFile(recipeId, multipartFile);
+		imageService.saveImageFile(recipeId, multipartFile).block();
 		
 		
 		//Then
-		verify(recipeRespository, times(1)).findById(anyString());
-		verify(recipeRespository, times(1)).save(argumentCaptor.capture());
+		verify(recipeReactiveRepository, times(1)).findById(anyString());
+		verify(recipeReactiveRepository, times(1)).save(argumentCaptor.capture());
 		Recipe savedRecipe = argumentCaptor.getValue();
 		assertEquals(multipartFile.getBytes().length, savedRecipe.getImage().length);
 		

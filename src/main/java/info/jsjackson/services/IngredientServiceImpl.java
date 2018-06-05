@@ -12,8 +12,6 @@ import info.jsjackson.converters.IngredientCommandToIngredient;
 import info.jsjackson.converters.IngredientToIngredientCommand;
 import info.jsjackson.domain.Ingredient;
 import info.jsjackson.domain.Recipe;
-import info.jsjackson.repositories.RecipeRepository;
-import info.jsjackson.repositories.UnitOfMeasureRepository;
 import info.jsjackson.repositories.reactive.RecipeReactiveRepository;
 import info.jsjackson.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -47,17 +45,16 @@ public class IngredientServiceImpl implements IngredientService {
 	public Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
 
 		return recipeReactiveRepository.findById(recipeId)
-				.map(recipe -> recipe.getIngredients()
-						.stream()
-						.filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
-						.findFirst())
-				.filter(Optional::isPresent)
+				.flatMapIterable(Recipe::getIngredients)
+				.filter(ingredient -> ingredient.getId().equalsIgnoreCase(ingredientId))
+				.single()
 				.map(ingredient -> {
-					IngredientCommand ingredientCommand = ingredientToIngredientCommand.convert(ingredient.get());
+					IngredientCommand ingredientCommand = ingredientToIngredientCommand.convert(ingredient);
 					ingredientCommand.setRecipeId(recipeId);
 					return ingredientCommand;
 					
 				});
+
 		
 		/*Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
 		if (!recipeOptional.isPresent()) {

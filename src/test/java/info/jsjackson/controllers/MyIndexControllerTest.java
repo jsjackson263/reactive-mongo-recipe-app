@@ -1,11 +1,15 @@
 package info.jsjackson.controllers;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
@@ -20,6 +24,7 @@ import org.springframework.ui.Model;
 
 import info.jsjackson.domain.Recipe;
 import info.jsjackson.services.RecipeService;
+import reactor.core.publisher.Flux;
 
 public class MyIndexControllerTest {
 
@@ -49,6 +54,9 @@ public class MyIndexControllerTest {
 		 */
 		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build(); // standaloneSetup - don't bring up the
 																				// Spring context
+		
+		when(recipeService.getRecipes()).thenReturn(Flux.empty());
+		
 		mockMvc.perform(MockMvcRequestBuilders.get("/"))
 		.andExpect(status().isOk())
 		.andExpect(view().name("index"))
@@ -66,9 +74,9 @@ public class MyIndexControllerTest {
 		Recipe recipe = new Recipe();
 		recipe.setId("2");
 		recipes.add(recipe);
-		when(recipeService.getRecipes()).thenReturn(recipes);
+		when(recipeService.getRecipes()).thenReturn(Flux.fromIterable(recipes));
 
-		ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+		ArgumentCaptor<List<Recipe>> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
 		// When
 		String view = controller.getIndexPage(model);
@@ -79,8 +87,9 @@ public class MyIndexControllerTest {
 		verify(recipeService, times(1)).getRecipes();
 		verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
 
-		Set<Recipe> setInController = argumentCaptor.getValue();
-		assertEquals(2, setInController.size());
+		List<Recipe> listInController = argumentCaptor.getValue();
+		
+		assertEquals(2, listInController.size());
 	}
 
 }

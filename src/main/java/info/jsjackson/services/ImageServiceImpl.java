@@ -6,12 +6,12 @@ package info.jsjackson.services;
 import java.io.IOException;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import info.jsjackson.domain.Recipe;
-import info.jsjackson.repositories.RecipeRepository;
+import info.jsjackson.repositories.reactive.RecipeReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 /**
  * @author josan 
@@ -30,18 +30,49 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ImageServiceImpl implements ImageService {
 
-	private final RecipeRepository recipeRepository;
+	private final RecipeReactiveRepository recipeReactiveRepository;
 	
-	public ImageServiceImpl(RecipeRepository recipeRepository) {
-		this.recipeRepository = recipeRepository;
+	public ImageServiceImpl(RecipeReactiveRepository recipeReactiveRepository) {
+		this.recipeReactiveRepository = recipeReactiveRepository;
 	}
 
 
 	@Override
-	@Transactional
-	public void saveImageFile(String recipeId, MultipartFile file) {
-		try {
-			Recipe recipe = recipeRepository.findById(recipeId).get();
+	public Mono<Void> saveImageFile(String recipeId, MultipartFile file) {
+		
+		Mono<Recipe> recipeMono = recipeReactiveRepository.findById(recipeId)
+		.map(recipe -> {
+			
+			Byte[] byteObjects = new Byte[0];
+			
+			try {
+			
+				byteObjects = new Byte[file.getBytes().length];
+			
+				int i =0;
+			
+				for (byte b : file.getBytes()) {
+					byteObjects[i++] = b;
+				}
+			
+				recipe.setImage(byteObjects);
+				
+				return recipe;
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			
+		});
+		
+		recipeReactiveRepository.save(recipeMono.block()).block();
+		
+		return Mono.empty();
+		
+		
+		/*try {
+			Recipe recipe = recipeReactiveRepository.findById(recipeId).get();
 			Byte[] byteObjects = new Byte[file.getBytes().length];
 			
 			//no autoboxing available for arrays inside Java 
@@ -53,13 +84,13 @@ public class ImageServiceImpl implements ImageService {
 			
 			recipe.setImage(byteObjects);
 			
-			recipeRepository.save(recipe);
+			recipeReactiveRepository.save(recipe);
 			
 		} catch (IOException e) {
 			//TODO: handle better
 			log.error("Error occurred " + e);
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 }

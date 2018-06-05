@@ -1,7 +1,10 @@
 package info.jsjackson.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -9,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +61,7 @@ public class IngredientControllerTest {
 		recipeCommand.setId("1");
 		
 		//When
-		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
 		
 		//Then
 		mockMvc.perform(get("/recipe/1/ingredients"))
@@ -97,7 +99,7 @@ public class IngredientControllerTest {
 		command.setId("1");
 		
 		//When
-		when(recipeService.findCommandById(anyString())).thenReturn(command);
+		when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 		when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 		
 		//Then

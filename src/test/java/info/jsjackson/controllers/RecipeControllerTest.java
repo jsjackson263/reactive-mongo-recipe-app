@@ -1,8 +1,11 @@
 package info.jsjackson.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,6 +25,7 @@ import info.jsjackson.commands.RecipeCommand;
 import info.jsjackson.domain.Recipe;
 import info.jsjackson.exceptions.NotFoundException;
 import info.jsjackson.services.RecipeService;
+import reactor.core.publisher.Mono;
 
 public class RecipeControllerTest {
 
@@ -54,7 +58,7 @@ public class RecipeControllerTest {
 		recipe.setId("2");
 
 		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-		when(recipeService.findById(anyString())).thenReturn(recipe);
+		when(recipeService.findById(anyString())).thenReturn(Mono.just(recipe));
 		
 		//When, Then ?
 		mockMvc.perform(get("/recipe/2/show"))
@@ -156,7 +160,7 @@ public class RecipeControllerTest {
 		RecipeCommand command = new RecipeCommand();
 		command.setId("5");
 		
-		when(recipeService.findCommandById(anyString())).thenReturn(command);
+		when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 		
 		mockMvc.perform(get("/recipe/1/update"))
 		.andExpect(status().isOk())

@@ -3,7 +3,7 @@
  */
 package info.jsjackson.controllers;
 
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +33,7 @@ public class IndexController {
 
 		log.debug("Getting index page");
 		
-		Set<Recipe> recipes = recipeService.getRecipes();
+		List<Recipe> recipes = recipeService.getRecipes().collectList().block();
 		model.addAttribute("recipes", recipes);
 		
 		
