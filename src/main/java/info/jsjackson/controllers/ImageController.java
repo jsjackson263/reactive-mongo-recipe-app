@@ -7,9 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,7 +57,7 @@ public class ImageController {
 		return "redirect:/recipe/" + recipeId + "/show";
 	}
 	
-	@GetMapping("/recipe/{recipeId}/recipeimage")
+	/*@GetMapping("/recipe/{recipeId}/recipeimage")
 	public void renderImageFromDB(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
 		RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
 		
@@ -79,5 +76,7 @@ public class ImageController {
 			IOUtils.copy(is, response.getOutputStream());
 		}
 		
-	}
+	}*/
+	
+	
 }

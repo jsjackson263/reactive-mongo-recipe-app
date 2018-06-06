@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import info.jsjackson.domain.Recipe;
 import info.jsjackson.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 
 /**
  * @author josan
@@ -33,7 +34,8 @@ public class IndexController {
 
 		log.debug("Getting index page");
 		
-		List<Recipe> recipes = recipeService.getRecipes().collectList().block();
+		//List<Recipe> recipes = recipeService.getRecipes().collectList().block();
+		Flux<Recipe> recipes = recipeService.getRecipes();
 		model.addAttribute("recipes", recipes);
 		
 		

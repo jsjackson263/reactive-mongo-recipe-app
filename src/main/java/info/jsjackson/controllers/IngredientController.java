@@ -3,11 +3,12 @@
  */
 package info.jsjackson.controllers;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,8 @@ import info.jsjackson.services.IngredientService;
 import info.jsjackson.services.RecipeService;
 import info.jsjackson.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * @author josan
@@ -31,12 +34,23 @@ public class IngredientController {
 	private final RecipeService recipeService;
 	private final IngredientService ingredientService;
 	private final UnitOfMeasureService unitOfMeasureService;
+	
+	private WebDataBinder webDataBinder;
+	
+	public static final String INGREDIENTFORM_URL = "recipe/ingredient/ingredientform";
 
 	public IngredientController(RecipeService recipeService, 
-			IngredientService ingredientService, UnitOfMeasureService unitOfMeasureService) {
+			IngredientService ingredientService, 
+			UnitOfMeasureService unitOfMeasureService) {
 		this.recipeService = recipeService;
 		this.ingredientService = ingredientService;
 		this.unitOfMeasureService = unitOfMeasureService;
+	}
+	
+	@InitBinder("ingredient")
+	public void initBinder(WebDataBinder webDataBinder) {
+		this.webDataBinder = webDataBinder;
+		
 	}
 
 	@GetMapping("/recipe/{recipeId}/ingredients")
@@ -50,8 +64,8 @@ public class IngredientController {
 	@GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/show")
 	public String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 		
-		IngredientCommand ingredientCommand = 
-				ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId).block();
+		Mono<IngredientCommand> ingredientCommand = 
+				ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId);
 		
 		model.addAttribute("ingredient", ingredientCommand);
 		
@@ -72,9 +86,8 @@ public class IngredientController {
 		
 		//init UOM
 		ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
-		model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
 		
-		return "recipe/ingredient/ingredientform";
+		return INGREDIENTFORM_URL;
 		
 		
 	}
@@ -89,16 +102,26 @@ public class IngredientController {
 				ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId).block();
 		model.addAttribute("ingredient", ingredientcommand);
 		
-		List<UnitOfMeasureCommand> unitOfMeasureSet = unitOfMeasureService.listAllUoms().collectList().block();
-		model.addAttribute("uomList", unitOfMeasureSet);
-		
-		
 		return "recipe/ingredient/ingredientform";
 		
 	}
 	
 	@PostMapping("recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@ModelAttribute IngredientCommand command){
+    public String saveOrUpdate(@ModelAttribute("ingredient") IngredientCommand command,
+    		@PathVariable String recipeId, Model model){
+		
+		webDataBinder.validate();
+		BindingResult bindingResult = webDataBinder.getBindingResult();
+		
+		if (bindingResult.hasErrors()) {
+			bindingResult.getAllErrors().forEach(error ->  {
+				log.debug(error.toString());
+			});
+
+			return INGREDIENTFORM_URL;
+		}
+		
+		
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
 
         log.debug("saved ingredient id:" + savedCommand.getId());
@@ -113,6 +136,13 @@ public class IngredientController {
 		ingredientService.deleteById(recipeId, ingredientId).block();
 		
 		return "redirect:/recipe/" + recipeId + "/ingredients";
+	}
+	
+	@ModelAttribute("uomList")
+	public Flux<UnitOfMeasureCommand> populateUOMList() {
+		
+		return unitOfMeasureService.listAllUoms();
+		
 	}
 	
 
