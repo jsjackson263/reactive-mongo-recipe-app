@@ -31,6 +31,7 @@ import reactor.core.publisher.Mono;
  * @author josan 
  *
  */
+@Ignore
 public class ImageControllerTest {
 
 	@Mock
